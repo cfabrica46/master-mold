@@ -1,6 +1,8 @@
 package config
 
 import (
+	"time"
+
 	apiconfig "github.com/cfabrica46/api-config"
 )
 
@@ -20,7 +22,7 @@ func configEntries() []apiconfig.ConfigEntry {
 		{
 			VariableName: "uri_prefix",
 			Description:  "Prefijo de URL con version",
-			DefaultValue: "",
+			DefaultValue: "/api/v1",
 		},
 	}
 }
