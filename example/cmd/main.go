@@ -27,10 +27,20 @@ func main() {
 		transport.EncodeResponse,
 	)
 
-	router := mux.NewRouter()
+	router := mux.NewRouter().PathPrefix(cfg.URIPrefix).Subrouter()
 
 	router.Methods(http.MethodPost).Path("/").Handler(serviceHandler)
 
+	server := &http.Server{
+		Addr:              cfg.Port,
+		ReadHeaderTimeout: cfg.Timeout,
+		Handler:           router,
+	}
+
 	log.Println("ListenAndServe on localhost" + cfg.Port)
-	log.Println(http.ListenAndServe(cfg.Port, router))
+
+	err = server.ListenAndServe()
+	if err != nil {
+		panic(err)
+	}
 }

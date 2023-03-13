@@ -1,9 +1,5 @@
 package entity
 
-type Request struct {
-	Body string `json:"body"`
-}
+type Request struct{}
 
-type Response struct {
-	Message string `json:"message"`
-}
+type Response struct{}

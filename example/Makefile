@@ -3,7 +3,7 @@ API_NAME=example
 
 build: 
 	@echo "Creando Binario ..."
-	@go build -mod=vendor -ldflags '-s -w' -o $(BUILDPATH)/build/bin/${API_NAME} cmd/main.go
+	@go build -ldflags '-s -w' -o $(BUILDPATH)/build/bin/${API_NAME} cmd/main.go
 	@echo "Binario generado en build/bin/${API_NAME}"
 
 test: 
