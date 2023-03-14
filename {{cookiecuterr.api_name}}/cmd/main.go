@@ -4,10 +4,10 @@ import (
 	"log"
 	"net/http"
 
-	"example/cmd/config"
-	"example/internal/endpoint"
-	"example/internal/service"
-	"example/internal/transport"
+	"{{cookiecutter.api_name}}/cmd/config"
+	"{{cookiecutter.api_name}}/internal/endpoint"
+	"{{cookiecutter.api_name}}/internal/service"
+	"{{cookiecutter.api_name}}/internal/transport"
 
 	httptransport "github.com/go-kit/kit/transport/http"
 	"github.com/gorilla/mux"

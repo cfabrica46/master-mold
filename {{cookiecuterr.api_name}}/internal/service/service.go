@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	"example/internal/entity"
+	"{{cookiecutter.api_name}}/internal/entity"
 )
 
 type Service interface {

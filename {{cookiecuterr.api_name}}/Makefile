@@ -1,5 +1,5 @@
 BUILDPATH=$(CURDIR)
-API_NAME=example
+API_NAME={{cookiecutter.api_name}}
 
 build: 
 	@echo "Creando Binario ..."

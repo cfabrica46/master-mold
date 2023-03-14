@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 
-	"example/internal/entity"
-	"example/internal/service"
+	"{{cookiecutter.api_name}}/internal/entity"
+	"{{cookiecutter.api_name}}/internal/service"
 
 	"github.com/go-kit/kit/endpoint"
 )

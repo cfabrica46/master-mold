@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"example/internal/entity"
+	"{{cookiecutter.api_name}}/internal/entity"
 )
 
 func DecodeRequest(_ context.Context, r *http.Request) (any, error) {
