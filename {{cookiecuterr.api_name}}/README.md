@@ -1,5 +1,4 @@
 # {{cookiecutter.api_name}}
-{{cookiecutter.api_description}}
 
 ## How compile
 To compile simply do make build which will generate a binary in build/bin/{{cookiecutter.api_name}}
