@@ -1,22 +1,56 @@
-# master-mold
+# cookiecutter-app-image
 
-This Cookiecutter template has the functionality to serve as a basis for future apis that implement a microservices architecture and along with that gokit.
+Este Cookiecutter incluye todo lo necesario para trabajar en su proyecto de API. El cookiecutter le pedirá algunos input y creara un directorio con un proyecto (**build-image**) que incluyen el pipeline listos para realizar:
 
-## Como compilar
+* Versionamiento semantico
+* Publicación de la imagen en harbor y revisión de seguridad.
 
-Para compilar simplemente se debe hacer `make build` lo que generara un binario en `build/bin/api-test`
+## Prerequisitos:
 
-## Correr tests y coverage
+* [pre-commit](https://pre-commit.com/)
+* [cookiecutter](https://cookiecutter.readthedocs.io/en/2.0.2/)
 
-Para correr los tests se debe hacer `make test` y para obtener el coverage `make coverage`
+## Instalación:
 
-## Configuración
+```
+$ cookiecutter https://gitlab.falabella.tech/fif/integracion/forthehorde/templates/cookiecutters/images/cookiecutter-api-go-image.git --checkout v0.1.23
+```
 
-| Variables       |  Command && Shortcut   |                Descripción                |
-| --------------- | :--------------------: | :---------------------------------------: |
-| PORT            |      --port=, -p       | Puerto que escucha el servicio http, por defecto `8080`         |
+Los input:
 
+* api_name [api_test]: Nombre de la aplicación 
+* runner_tag [integracion-gitlab-dcc-qa]: Tag en donde se ejecutará
+* harbor_project [integracion-api-dev]: Nombre del proyecto harbor a utilizar
+* image_description [Breve descripcion de la api]: Descripcion de que hace la api,
 
-### Cookiecutter
-* https://github.com/cfabrica46/master-mold
+La salida del comando creara un directorio con el nombre del **api_name**
 
+## Estructura de directorio
+
+Dentro del directorio se el siguiente árbol de directorio:
+
+```
+$ cd api-test/
+$ tree -a
+.
+└── build-image
+    ├── .gitignore
+    ├── .gitlab-ci.yml
+    ├── .version
+    ├── README.md
+    └── ias
+        ├── .dockerignore
+        └── Dockerfile
+
+5 directories, 22 files
+```
+
+El directorio:
+
+* **build-image** = Directorio que contiene toda la lógica de programación de su API, y un pipeline (```.gitlab-ci.yml```) que se encargar del versionamiento semántico, creación de la imagen mediante el Dockerfile y la publicación de la imagen a harbor en el proyecto que se definió en la pregunta del cookiecutter **harbor_project**. **No modificar el pipeline**.
+
+## Versionamiento semantico 
+
+Build-image tiene un archivo oculto **.version** con la versión 0.1.0, que debe ir editando para que el pipeline de semversión genere los tags (para el repositorio, y la versión de la imagen) de su API.
+
+Mas información de versionamiento semantico [acá](https://gitlab.falabella.tech/fif/arquitectura/devops-and-cloud/gitlab-templates/semversion-tagging-pipeline).

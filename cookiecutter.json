@@ -1,3 +1,6 @@
 {
-	"api_name": "api-test"
+    "api_name": "api-test",
+    "runner_tag": "integracion-gitlab-dcc-qa",
+    "harbor_project": "integracion-api-dev",
+    "image_description": "Breve descripcion de la api"    
 }

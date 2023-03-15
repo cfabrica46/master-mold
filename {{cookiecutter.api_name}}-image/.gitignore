@@ -60,12 +60,11 @@ coverfile_out*
 
 ### Go Patch ###
 /build/
-/build/bin/api-bfco-facility
+/build/bin/{{cookiecutter.api_name}}
 
 # Vscode generated
 /.vscode/
 
 # IntelliJ
 .idea/
-
 
