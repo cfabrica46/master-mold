@@ -1,9 +1,7 @@
 package entity
 
-// RequestStruct reemplazar por request del service a implementar
-type RequestStruct struct {
-}
+// Request reemplazar por request del service a implementar
+type Request struct{}
 
-// ResponseStruct reemplazar por request del service a implementar
-type ResponseStruct struct {
-}
+// Response reemplazar por request del service a implementar
+type Response struct{}

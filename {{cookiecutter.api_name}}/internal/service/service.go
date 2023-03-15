@@ -7,17 +7,16 @@ import (
 )
 
 type Service interface {
-	Call(context.Context, *entity.RequestStruct) (*entity.ResponseStruct, error)
+	Call(ctx context.Context, req entity.Request) (*entity.Response, error)
 }
 
-type service struct {
+type service struct{}
+
+func NewService() Service {
+	return &service{}
 }
 
-func MakeService() Service {
-	return new(service)
-}
-
-func (s *service) Call(context.Context, *entity.RequestStruct) (*entity.ResponseStruct, error){
-	//DO NOTHING
-	return new(entity.ResponseStruct), nil
+func (service) Call(ctx context.Context, req entity.Request) (*entity.Response, error) {
+	// DO NOTHING
+	return nil, nil
 }
