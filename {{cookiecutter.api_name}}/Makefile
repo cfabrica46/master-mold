@@ -1,12 +1,12 @@
 BUILDPATH=$(CURDIR)
 API_NAME={{cookiecutter.api_name}}
 
-build: 
+build:
 	@echo "Creando Binario ..."
-	@go build -mod=vendor -ldflags '-s -w' -o $(BUILDPATH)/build/bin/${API_NAME} cmd/main.go
+	@go build -ldflags '-s -w' -o $(BUILDPATH)/build/bin/${API_NAME} cmd/main.go
 	@echo "Binario generado en build/bin/${API_NAME}"
 
-test: 
+test:
 	@echo "Ejecutando tests..."
 	@go test ./... --coverprofile coverfile_out >> /dev/null
 	@go tool cover -func coverfile_out
@@ -17,4 +17,4 @@ coverage:
 	@go tool cover -func coverfile_out
 	@go tool cover -func coverfile_out | grep total | awk '{print substr($$3, 1, length($$3)-1)}' > coverage.txt
 
-.PHONY: test build
+.PHONY: test build coverage all clean
