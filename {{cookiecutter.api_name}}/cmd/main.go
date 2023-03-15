@@ -1,77 +1,46 @@
 package main
 
 import (
-	"net"
+	"log"
 	"net/http"
-	"os"
-
-	commons "gitlab.falabella.tech/fif/integracion/forthehorde/commons/go-microservices-commons"
-	"github.com/opentracing/opentracing-go"
-	"gopkg.in/DataDog/dd-trace-go.v1/profiler"
-	otr "gopkg.in/DataDog/dd-trace-go.v1/ddtrace/opentracer"
-	tr "gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 
 	"{{cookiecutter.api_name}}/cmd/config"
 	"{{cookiecutter.api_name}}/internal/endpoint"
-	h "{{cookiecutter.api_name}}/internal/handler"
 	"{{cookiecutter.api_name}}/internal/service"
+	"{{cookiecutter.api_name}}/internal/transport"
+
+	httptransport "github.com/go-kit/kit/transport/http"
+	"github.com/gorilla/mux"
 )
 
 func main() {
-	cfg := config.GetAPIConfig()
-
-	logger := commons.ConfigureLogger(cfg.LoggingLevel)
-
-	var metricsConf *commons.MetricsConfig
-	if cfg.EnabledMetrics {
-		metricsConf = commons.MakeDefaultEndpointMetrics()
+	cfg, err := config.GetAPIConfig()
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	var tracer opentracing.Tracer
+	svc := service.NewService()
 
-	if cfg.DDTraceEnabled {
-		// New
-		addr := net.JoinHostPort(
-			os.Getenv("DD_AGENT_HOST"),
-			"8126",
-		)
+	serviceHandler := httptransport.NewServer(
+		endpoint.MakeServiceEndpoint(svc),
+		transport.DecodeRequest,
+		transport.EncodeResponse,
+	)
 
-		tracer = otr.New(
-			tr.WithAgentAddr(addr),
-		)
+	router := mux.NewRouter().PathPrefix(cfg.URIPrefix).Subrouter()
 
-		defer tr.Stop()
+	router.Methods(http.MethodPost).Path("/").Handler(serviceHandler)
 
-	} else {
-		tracer = opentracing.NoopTracer{}
+	server := &http.Server{
+		Addr:              cfg.Port,
+		ReadHeaderTimeout: cfg.Timeout,
+		Handler:           router,
 	}
 
-	opentracing.SetGlobalTracer(tracer)
+	log.Println("ListenAndServe on localhost" + cfg.Port)
 
-	if cfg.DDProfileEnabled {
-		// Mover a commons
-		err := profiler.Start(
-			profiler.WithAgentAddr(os.Getenv("DD_AGENT_HOST")+":8126"),
-			profiler.WithProfileTypes(
-				profiler.CPUProfile,
-				profiler.HeapProfile,
-			),
-		)
-		if err != nil {
-			logger.Log(err)
-			os.Exit(1)
-		}
-		defer profiler.Stop()
+	err = server.ListenAndServe()
+	if err != nil {
+		panic(err)
 	}
-
-	var handler http.Handler
-	{
-		svc := service.MakeService()
-		serviceEndpoint := endpoint.MakeServiceEndpoint(svc)
-		handler = h.NewHTTPHandler(logger, serviceEndpoint, tracer, metricsConf, cfg.URIPrefix)
-	}
-
-	g := commons.CreateServer(handler, cfg.Port, logger)
-
-	logger.Log("exit", g.Run())
 }
