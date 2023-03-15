@@ -7,7 +7,7 @@ import (
 	"{{cookiecutter.api_name}}/cmd/config"
 	"{{cookiecutter.api_name}}/internal/endpoint"
 	"{{cookiecutter.api_name}}/internal/service"
-	"{{cookiecutter.api_name}}/internal/transport"
+	"{{cookiecutter.api_name}}/internal/handler"
 
 	httptransport "github.com/go-kit/kit/transport/http"
 	"github.com/gorilla/mux"
@@ -23,8 +23,8 @@ func main() {
 
 	serviceHandler := httptransport.NewServer(
 		endpoint.MakeServiceEndpoint(svc),
-		transport.DecodeRequest,
-		transport.EncodeResponse,
+		handler.DecodeRequest,
+		handler.EncodeResponse,
 	)
 
 	router := mux.NewRouter().PathPrefix(cfg.URIPrefix).Subrouter()
